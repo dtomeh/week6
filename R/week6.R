@@ -13,10 +13,10 @@ library(tidyverse)
 library(stringr)
 library(rebus)
 sample(citations_txt, 10)
-citations_tbl <- enframe(citations_txt, name=NULL, value="cite") %>% mutate(line=row_number()) %>%
+citations_tbl <- enframe(citations_txt, name=NULL, value="cite") %>% mutate(line=as.numeric(row_number())) %>%
   mutate(cite= str_remove_all(cite,pattern="\"|\'")) %>%
-  mutate(year=str_extract(cite, pattern = "\\d{4}")) %>%
-  mutate(page_start=str_match(cite, pattern="((\\d+)\\-(\\d+))")[,3]) %>%
+  mutate(year=as.numeric(str_extract(cite, pattern = "\\d{4}"))) %>%
+  mutate(page_start=as.numeric(str_match(cite, pattern="((\\d+)\\-(\\d+))")[,3])) %>%
   mutate(perf_ref=str_detect(cite, pattern = or("performance", "Performance", "PERFORMANCE"))) %>%
   mutate(title=str_match(cite, pattern= "\\d{4}\\)\\.\\s?([:graph:][^.(]+)")[,2]) %>%
   mutate(first_author = str_match(cite, pattern="^\\*?\\s?([:upper:][:graph:]+\\,?\\s*[:upper:]\\.?\\s*?[:upper:]?\\.?\\s*?[:upper:]?\\.)")[,2])
